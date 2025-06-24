@@ -38,16 +38,16 @@ const CompactPartnersSection = () => {
   };
 
   return (
-    <section className="py-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <section className="py-2 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
       <div className="cv-container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mb-4"
+          className="text-center mb-3"
         >
-          <h2 className="text-lg md:text-xl font-bold mb-1 font-display bg-gradient-to-r from-cv-yellow to-white bg-clip-text text-transparent">
+          <h2 className="text-base md:text-lg font-bold mb-1 font-display bg-gradient-to-r from-cv-yellow to-white bg-clip-text text-transparent">
             NOSSOS PARCEIROS
           </h2>
           <p className="text-xs text-gray-300 max-w-lg mx-auto">
@@ -55,7 +55,7 @@ const CompactPartnersSection = () => {
           </p>
         </motion.div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           {Object.entries(partnersByCategory).map(([key, category], categoryIndex) => (
             <motion.div
               key={key}
@@ -64,15 +64,15 @@ const CompactPartnersSection = () => {
               transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
               viewport={{ once: true }}
             >
-              <div className="flex items-center justify-center mb-2">
+              <div className="flex items-center justify-center mb-1">
                 <div className={`flex items-center space-x-1 px-2 py-0.5 rounded-full ${category.color} text-white shadow-lg`}>
-                  <category.icon className="w-2.5 h-2.5" />
+                  <category.icon className="w-2 h-2" />
                   <h3 className="text-xs font-bold">{category.title}</h3>
                 </div>
               </div>
 
               <div className="flex justify-center">
-                <div className="grid gap-1.5 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-3xl">
+                <div className="grid gap-1 grid-cols-2 md:grid-cols-3 lg:grid-cols-5 max-w-2xl">
                   {category.partners.map((partner, index) => (
                     <motion.div
                       key={partner.name}
@@ -83,12 +83,12 @@ const CompactPartnersSection = () => {
                       whileHover={{ scale: 1.05 }}
                       className="group"
                     >
-                      <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-all duration-300 h-12 p-2">
+                      <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-all duration-300 h-10 p-1.5">
                         <CardContent className="p-0 h-full flex items-center justify-center">
                           <img 
                             src={partner.logo} 
                             alt={partner.name}
-                            className="max-h-8 max-w-full object-contain filter brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-300"
+                            className="max-h-6 max-w-full object-contain filter brightness-0 invert group-hover:brightness-100 group-hover:invert-0 transition-all duration-300"
                           />
                         </CardContent>
                       </Card>
@@ -106,10 +106,10 @@ const CompactPartnersSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mt-4"
+          className="text-center mt-3"
         >
-          <div className="bg-gradient-to-r from-cv-blue to-cv-red rounded-lg p-2 max-w-md mx-auto">
-            <h3 className="text-sm font-bold mb-1">Seja Nosso Parceiro</h3>
+          <div className="bg-gradient-to-r from-cv-blue to-cv-red rounded p-2 max-w-sm mx-auto">
+            <h3 className="text-xs font-bold mb-1">Seja Nosso Parceiro</h3>
             <p className="text-xs mb-1 text-gray-100">
               Junte-se ao desenvolvimento do basquetebol cabo-verdiano
             </p>
