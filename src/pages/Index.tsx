@@ -3,11 +3,12 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import DynamicBannerCarousel from "@/components/hero/DynamicBannerCarousel";
-import PremiumStatsSection from "@/components/PremiumStatsSection";
+import RealFCBBStats from "@/components/RealFCBBStats";
 import FibaStyleLiveResults from "@/components/FibaStyleLiveResults";
-import FibaNewsSection from "@/components/FibaNewsSection";
+import RealNewsSection from "@/components/RealNewsSection";
 import FPBStylePartnersSection from "@/components/partners/FPBStylePartnersSection";
-import TeamsSection from "@/components/TeamsSection";
+import RealClubsSection from "@/components/RealClubsSection";
+import RealPlayersSection from "@/components/RealPlayersSection";
 import CompetitionsSection from "@/components/CompetitionsSection";
 import FibaStyleHeader from "@/components/header/FibaStyleHeader";
 import Footer from "@/components/Footer";
@@ -17,7 +18,7 @@ const Index = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    console.log("Index page loaded - FCBB website initialized");
+    console.log("Index page loaded - FCBB website initialized with real data");
     
     // Add smooth scroll behavior to the entire page
     document.documentElement.style.scrollBehavior = 'smooth';
@@ -93,24 +94,44 @@ const Index = () => {
               <FibaStyleLiveResults />
             </motion.section>
 
-            {/* Premium Stats Section */}
+            {/* Real FCBB Stats Section */}
             <motion.section
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <PremiumStatsSection />
+              <RealFCBBStats />
             </motion.section>
 
-            {/* Teams Section */}
+            {/* Real News Section */}
             <motion.section
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <TeamsSection />
+              <RealNewsSection />
+            </motion.section>
+
+            {/* Real Players Section */}
+            <motion.section
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <RealPlayersSection />
+            </motion.section>
+
+            {/* Real Clubs Section */}
+            <motion.section
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <RealClubsSection />
             </motion.section>
 
             {/* Competitions Section */}
@@ -123,17 +144,7 @@ const Index = () => {
               <CompetitionsSection />
             </motion.section>
 
-            {/* News Section */}
-            <motion.section
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <FibaNewsSection />
-            </motion.section>
-
-            {/* FPB Style Partners Section */}
+            {/* Partners Section */}
             <FPBStylePartnersSection />
           </div>
         </main>

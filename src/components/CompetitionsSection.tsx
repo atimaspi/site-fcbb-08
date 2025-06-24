@@ -2,10 +2,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, Calendar, Users, Trophy, Clock } from 'lucide-react';
-import { useCompetitionsData } from '@/hooks/useCompetitionsData';
+import { useRealFCBBData } from '@/hooks/useRealFCBBData';
 
 const CompetitionsSection = () => {
-  const { competitions, loading, error } = useCompetitionsData();
+  const { competitions, loading, error } = useRealFCBBData();
 
   if (loading) {
     return (
@@ -34,14 +34,27 @@ const CompetitionsSection = () => {
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'ativa':
+      case 'active':
         return 'bg-green-100 text-green-800 border-green-200';
-      case 'programada':
+      case 'upcoming':
         return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'finalizada':
+      case 'finished':
         return 'bg-gray-100 text-gray-800 border-gray-200';
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'active':
+        return 'Ativa';
+      case 'upcoming':
+        return 'Programada';
+      case 'finished':
+        return 'Finalizada';
+      default:
+        return 'Desconhecido';
     }
   };
 
@@ -87,7 +100,7 @@ const CompetitionsSection = () => {
                   </h3>
                   <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(competition.status)}`}>
                     <Clock className="w-3 h-3 mr-1" aria-hidden="true" />
-                    {competition.status}
+                    {getStatusLabel(competition.status)}
                   </span>
                 </div>
               </header>
@@ -99,8 +112,8 @@ const CompetitionsSection = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center text-gray-600">
-                    <Users className="w-4 h-4 mr-2 text-cv-blue" aria-hidden="true" />
-                    <span className="text-sm">{competition.participants} equipas</span>
+                    <Trophy className="w-4 h-4 mr-2 text-cv-blue" aria-hidden="true" />
+                    <span className="text-sm">{competition.type}</span>
                   </div>
                   
                   <div className="flex items-center text-gray-600">
@@ -109,26 +122,27 @@ const CompetitionsSection = () => {
                   </div>
                 </div>
 
-                <div className="bg-cv-yellow/10 rounded-lg p-4">
-                  <div className="flex items-center text-cv-blue mb-2">
-                    <Trophy className="w-5 h-5 mr-2" aria-hidden="true" />
-                    <span className="font-semibold">Atual Campeão</span>
+                {competition.start_date && competition.end_date && (
+                  <div className="bg-cv-yellow/10 rounded-lg p-4">
+                    <div className="flex items-center text-cv-blue mb-2">
+                      <Calendar className="w-5 h-5 mr-2" aria-hidden="true" />
+                      <span className="font-semibold">Período</span>
+                    </div>
+                    <p className="text-gray-700 font-medium">
+                      {new Date(competition.start_date).toLocaleDateString('pt-CV')} - {new Date(competition.end_date).toLocaleDateString('pt-CV')}
+                    </p>
                   </div>
-                  <p className="text-gray-700 font-medium">{competition.currentChampion}</p>
-                </div>
+                )}
               </div>
 
               <footer>
-                <a
-                  href={competition.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
                   className="inline-flex items-center px-6 py-3 bg-cv-blue text-white rounded-lg hover:bg-cv-blue/90 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cv-blue focus:ring-offset-2 shadow-lg hover:shadow-xl"
-                  aria-label={`Ver mais sobre ${competition.name} (abre numa nova janela)`}
+                  aria-label={`Ver mais sobre ${competition.name}`}
                 >
                   <span>Ver Mais</span>
                   <ExternalLink className="w-4 h-4 ml-2" aria-hidden="true" />
-                </a>
+                </button>
               </footer>
             </motion.article>
           ))}
