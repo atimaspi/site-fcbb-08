@@ -4,39 +4,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
-
-interface NavItem {
-  label: string;
-  href?: string;
-  sectionId?: string;
-  submenu?: Array<{
-    label: string;
-    href: string;
-  }>;
-}
-
-const navItems: NavItem[] = [
-  { label: 'Início', href: '/' },
-  { 
-    label: 'Sobre a FCBB',
-    submenu: [
-      { label: 'História', href: '/sobre/historia' },
-      { label: 'Missão e Visão', href: '/sobre/missao-visao' },
-      { label: 'Direção', href: '/sobre/direcao' },
-    ]
-  },
-  { 
-    label: 'Competições',
-    submenu: [
-      { label: 'Liga Nacional', href: '/competicoes/liga-nacional' },
-      { label: 'Taça de Cabo Verde', href: '/competicoes/taca' },
-      { label: 'Super Taça', href: '/competicoes/super-taca' },
-    ]
-  },
-  { label: 'Equipas', sectionId: 'equipas' },
-  { label: 'Notícias', href: '/noticias' },
-  { label: 'Contactos', href: '/contacto' },
-];
+import { navItems } from './navigationData';
 
 interface EnhancedNavigationProps {
   isScrolled: boolean;
@@ -49,86 +17,82 @@ const EnhancedNavigation = ({ isScrolled, isMobile = false, onCloseMenu }: Enhan
   const location = useLocation();
   const { scrollToSection } = useSmoothScroll();
 
-  const isActive = (item: NavItem) => {
-    if (item.href) {
-      return location.pathname === item.href;
-    }
-    return false;
+  const isActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(path);
   };
 
-  const handleItemClick = (item: NavItem) => {
+  const handleItemClick = (item: any) => {
     if (item.sectionId) {
       scrollToSection(item.sectionId);
       if (onCloseMenu) onCloseMenu();
     }
   };
 
-  const toggleDropdown = (label: string) => {
-    setActiveDropdown(activeDropdown === label ? null : label);
+  const toggleDropdown = (key: string) => {
+    setActiveDropdown(activeDropdown === key ? null : key);
   };
 
   if (isMobile) {
     return (
       <nav className="lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-200 rounded-b-2xl shadow-2xl mt-2">
         <div className="py-6 space-y-2 max-h-96 overflow-y-auto">
+          <Link
+            to="/"
+            className={`block px-6 py-3 font-semibold rounded-lg mx-3 transition-all duration-300 ${
+              location.pathname === '/'
+                ? 'text-cv-blue bg-cv-blue/10 border-l-4 border-cv-blue'
+                : 'text-gray-700 hover:text-cv-blue hover:bg-cv-blue/5'
+            }`}
+            onClick={onCloseMenu}
+            aria-current={location.pathname === '/' ? 'page' : undefined}
+          >
+            Início
+          </Link>
+          
           {navItems.map((item) => (
-            <div key={item.label}>
-              {item.href || item.sectionId ? (
-                item.href ? (
-                  <Link
-                    to={item.href}
-                    className={`block px-6 py-3 font-semibold rounded-lg mx-3 transition-all duration-300 ${
-                      isActive(item)
-                        ? 'text-cv-blue bg-cv-blue/10 border-l-4 border-cv-blue'
-                        : 'text-gray-700 hover:text-cv-blue hover:bg-cv-blue/5'
-                    }`}
-                    onClick={onCloseMenu}
-                    aria-current={isActive(item) ? 'page' : undefined}
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <button
-                    onClick={() => handleItemClick(item)}
-                    className="block w-full text-left px-6 py-3 font-semibold rounded-lg mx-3 text-gray-700 hover:text-cv-blue hover:bg-cv-blue/5 transition-all duration-300"
-                  >
-                    {item.label}
-                  </button>
-                )
-              ) : (
+            <div key={item.key}>
+              {item.dropdown && item.items ? (
                 <button
-                  onClick={() => toggleDropdown(item.label)}
+                  onClick={() => toggleDropdown(item.key || "")}
                   className="block w-full text-left px-6 py-3 font-semibold rounded-lg mx-3 text-gray-700 hover:text-cv-blue hover:bg-cv-blue/5 transition-all duration-300"
-                  aria-expanded={activeDropdown === item.label}
+                  aria-expanded={activeDropdown === item.key}
                   aria-haspopup="true"
                 >
                   <div className="flex items-center justify-between">
-                    {item.label}
+                    {item.title}
                     <motion.div
-                      animate={{ rotate: activeDropdown === item.label ? 180 : 0 }}
+                      animate={{ rotate: activeDropdown === item.key ? 180 : 0 }}
                       transition={{ duration: 0.2 }}
                     >
                       <ChevronDown size={16} />
                     </motion.div>
                   </div>
                 </button>
+              ) : (
+                <Link
+                  to="/"
+                  className="block px-6 py-3 font-semibold rounded-lg mx-3 text-gray-700 hover:text-cv-blue hover:bg-cv-blue/5 transition-all duration-300"
+                  onClick={onCloseMenu}
+                >
+                  {item.title}
+                </Link>
               )}
               
-              {item.submenu && activeDropdown === item.label && (
+              {item.dropdown && item.items && activeDropdown === item.key && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   className="pl-6 bg-gray-50 rounded-lg ml-6 mr-3 mt-2 overflow-hidden"
                 >
-                  {item.submenu.map((subItem) => (
+                  {item.items.map((subItem) => (
                     <Link
-                      key={subItem.label}
-                      to={subItem.href}
+                      key={subItem.name}
+                      to={subItem.path}
                       className="block px-4 py-3 text-sm text-gray-600 hover:text-cv-blue hover:bg-white transition-colors rounded font-medium focus:outline-none focus:ring-2 focus:ring-cv-blue focus:ring-offset-2"
                       onClick={onCloseMenu}
                     >
-                      {subItem.label}
+                      {subItem.name}
                     </Link>
                   ))}
                 </motion.div>
@@ -142,88 +106,94 @@ const EnhancedNavigation = ({ isScrolled, isMobile = false, onCloseMenu }: Enhan
 
   return (
     <nav className="hidden lg:flex items-center space-x-2">
+      <Link
+        to="/"
+        className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 relative ${
+          location.pathname === '/'
+            ? isScrolled 
+              ? 'text-cv-blue after:scale-x-100' 
+              : 'text-cv-yellow after:scale-x-100'
+            : isScrolled 
+              ? 'text-gray-700 hover:text-cv-blue' 
+              : 'text-white hover:text-cv-yellow'
+        } after:content-[""] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-current after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left`}
+        aria-current={location.pathname === '/' ? 'page' : undefined}
+      >
+        Início
+      </Link>
+      
       {navItems.map((item) => (
-        <div key={item.label} className="relative group">
-          {item.href || item.sectionId ? (
-            item.href ? (
-              <Link
-                to={item.href}
-                className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 relative ${
-                  isActive(item)
-                    ? isScrolled 
-                      ? 'text-cv-blue after:scale-x-100' 
-                      : 'text-cv-yellow after:scale-x-100'
-                    : isScrolled 
-                      ? 'text-gray-700 hover:text-cv-blue' 
-                      : 'text-white hover:text-cv-yellow'
-                } after:content-[""] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-current after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left`}
-                aria-current={isActive(item) ? 'page' : undefined}
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <button
-                onClick={() => handleItemClick(item)}
-                className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 relative ${
-                  isScrolled 
-                    ? 'text-gray-700 hover:text-cv-blue' 
-                    : 'text-white hover:text-cv-yellow'
-                } after:content-[""] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-current after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left focus:outline-none focus:ring-2 focus:ring-cv-blue focus:ring-offset-2`}
-              >
-                {item.label}
-              </button>
-            )
-          ) : (
+        <div key={item.key} className="relative group">
+          {item.dropdown && item.items ? (
             <button
-              onMouseEnter={() => setActiveDropdown(item.label)}
+              onMouseEnter={() => setActiveDropdown(item.key || "")}
               onMouseLeave={() => setActiveDropdown(null)}
               className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center space-x-1 relative ${
-                isScrolled 
-                  ? 'text-gray-700 hover:text-cv-blue' 
-                  : 'text-white hover:text-cv-yellow'
+                isActive(item.items[0]?.path || "")
+                  ? isScrolled 
+                    ? 'text-cv-blue after:scale-x-100' 
+                    : 'text-cv-yellow after:scale-x-100'
+                  : isScrolled 
+                    ? 'text-gray-700 hover:text-cv-blue' 
+                    : 'text-white hover:text-cv-yellow'
               } after:content-[""] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-current after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left focus:outline-none focus:ring-2 focus:ring-cv-blue focus:ring-offset-2`}
-              aria-expanded={activeDropdown === item.label}
+              aria-expanded={activeDropdown === item.key}
               aria-haspopup="true"
             >
-              <span>{item.label}</span>
+              <span>{item.title}</span>
               <motion.div
-                animate={{ rotate: activeDropdown === item.label ? 180 : 0 }}
+                animate={{ rotate: activeDropdown === item.key ? 180 : 0 }}
                 transition={{ duration: 0.2 }}
               >
                 <ChevronDown size={16} />
               </motion.div>
             </button>
+          ) : (
+            <button
+              onClick={() => handleItemClick(item)}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 relative ${
+                isScrolled 
+                  ? 'text-gray-700 hover:text-cv-blue' 
+                  : 'text-white hover:text-cv-yellow'
+              } after:content-[""] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-current after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left focus:outline-none focus:ring-2 focus:ring-cv-blue focus:ring-offset-2`}
+            >
+              {item.title}
+            </button>
           )}
           
-          {item.submenu && (
+          {item.dropdown && item.items && (
             <motion.div
               className="absolute top-full left-0 w-72 bg-white rounded-lg shadow-2xl border border-gray-100 py-2 z-50 mt-2"
               initial={{ opacity: 0, y: -10, scale: 0.95 }}
               animate={{ 
-                opacity: activeDropdown === item.label ? 1 : 0,
-                y: activeDropdown === item.label ? 0 : -10,
-                scale: activeDropdown === item.label ? 1 : 0.95,
-                display: activeDropdown === item.label ? 'block' : 'none'
+                opacity: activeDropdown === item.key ? 1 : 0,
+                y: activeDropdown === item.key ? 0 : -10,
+                scale: activeDropdown === item.key ? 1 : 0.95,
+                display: activeDropdown === item.key ? 'block' : 'none'
               }}
               transition={{ duration: 0.2 }}
-              onMouseEnter={() => setActiveDropdown(item.label)}
+              onMouseEnter={() => setActiveDropdown(item.key || "")}
               onMouseLeave={() => setActiveDropdown(null)}
               role="menu"
-              aria-label={`Submenu ${item.label}`}
+              aria-label={`Submenu ${item.title}`}
             >
-              {item.submenu.map((subItem, index) => (
+              {item.items.map((subItem, index) => (
                 <motion.div
-                  key={subItem.label}
+                  key={subItem.name}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
                 >
                   <Link
-                    to={subItem.href}
-                    className="block px-4 py-3 text-gray-700 hover:bg-cv-blue/5 hover:text-cv-blue transition-all duration-200 font-medium border-b border-gray-100 last:border-b-0 focus:outline-none focus:ring-2 focus:ring-cv-blue focus:ring-offset-2"
+                    to={subItem.path}
+                    className={`block px-4 py-3 transition-all duration-200 font-medium border-b border-gray-100 last:border-b-0 focus:outline-none focus:ring-2 focus:ring-cv-blue focus:ring-offset-2 ${
+                      isActive(subItem.path)
+                        ? 'bg-cv-blue/10 text-cv-blue'
+                        : 'text-gray-700 hover:bg-cv-blue/5 hover:text-cv-blue'
+                    }`}
                     role="menuitem"
                   >
-                    {subItem.label}
+                    {subItem.name}
                   </Link>
                 </motion.div>
               ))}
