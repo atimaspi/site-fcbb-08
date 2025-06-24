@@ -59,7 +59,7 @@ const DynamicHeroSlider = () => {
   };
 
   return (
-    <section className="relative h-[700px] overflow-hidden">
+    <section className="relative h-[500px] md:h-[600px] overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
@@ -83,31 +83,31 @@ const DynamicHeroSlider = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="max-w-4xl text-white"
+              className="max-w-3xl text-white"
             >
-              <Badge className="mb-6 bg-cv-yellow text-cv-blue border-none px-6 py-3 text-sm font-bold">
+              <Badge className="mb-4 bg-cv-yellow text-cv-blue border-none px-4 py-2 text-xs font-bold">
                 {slides[currentSlide].badge}
               </Badge>
               
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight font-display">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight font-display">
                 {slides[currentSlide].title}
                 <span className="block text-cv-yellow">
                   {slides[currentSlide].subtitle}
                 </span>
               </h1>
               
-              <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-3xl leading-relaxed">
+              <p className="text-lg md:text-xl mb-6 text-gray-200 max-w-2xl leading-relaxed">
                 {slides[currentSlide].description}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Button 
                   size="lg" 
-                  className="bg-cv-red hover:bg-red-700 text-white px-8 py-4 text-lg font-semibold shadow-xl"
+                  className="bg-cv-red hover:bg-red-700 text-white px-6 py-3 text-base font-semibold shadow-xl"
                   asChild
                 >
                   <Link to={slides[currentSlide].ctaLink}>
-                    <Play className="mr-2 h-5 w-5" />
+                    <Play className="mr-2 h-4 w-4" />
                     {slides[currentSlide].ctaText}
                   </Link>
                 </Button>
@@ -115,11 +115,11 @@ const DynamicHeroSlider = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="border-2 border-white text-white hover:bg-white hover:text-cv-blue px-8 py-4 text-lg font-semibold backdrop-blur-sm"
+                  className="border-2 border-white text-white hover:bg-white hover:text-cv-blue px-6 py-3 text-base font-semibold backdrop-blur-sm"
                   asChild
                 >
                   <Link to="/noticias">
-                    <Trophy className="mr-2 h-5 w-5" />
+                    <Trophy className="mr-2 h-4 w-4" />
                     Últimas Notícias
                   </Link>
                 </Button>
@@ -130,12 +130,12 @@ const DynamicHeroSlider = () => {
       </AnimatePresence>
 
       {/* Navigation Controls */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex items-center space-x-4">
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30 flex items-center space-x-3">
         <button
           onClick={prevSlide}
-          className="p-3 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all"
+          className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4" />
         </button>
         
         <div className="flex space-x-2">
@@ -143,7 +143,7 @@ const DynamicHeroSlider = () => {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
+              className={`w-2 h-2 rounded-full transition-all ${
                 index === currentSlide ? 'bg-cv-yellow' : 'bg-white/50'
               }`}
             />
@@ -152,22 +152,22 @@ const DynamicHeroSlider = () => {
         
         <button
           onClick={nextSlide}
-          className="p-3 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all"
+          className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all"
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Quick Stats Overlay */}
-      <div className="absolute bottom-8 right-8 z-30 hidden lg:block">
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-white">
-          <div className="grid grid-cols-2 gap-4 text-center">
+      {/* Quick Stats Overlay - Compacto */}
+      <div className="absolute bottom-6 right-6 z-30 hidden lg:block">
+        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 text-white">
+          <div className="grid grid-cols-2 gap-3 text-center">
             <div>
-              <div className="text-2xl font-bold text-cv-yellow">16</div>
+              <div className="text-xl font-bold text-cv-yellow">16</div>
               <div className="text-xs">Equipas</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-cv-yellow">5</div>
+              <div className="text-xl font-bold text-cv-yellow">5</div>
               <div className="text-xs">Competições</div>
             </div>
           </div>

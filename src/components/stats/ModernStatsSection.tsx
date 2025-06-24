@@ -59,24 +59,24 @@ const ModernStatsSection = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50/40">
+    <section className="py-12 bg-gradient-to-br from-gray-50 to-blue-50/40">
       <div className="cv-container">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 font-display">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 font-display">
             Basquetebol em <span className="text-cv-blue">Números</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             O crescimento e desenvolvimento do basquetebol cabo-verdiano refletido em estatísticas
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -84,17 +84,17 @@ const ModernStatsSection = () => {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.05, rotateY: 5 }}
-              className="group perspective-1000"
+              whileHover={{ scale: 1.05 }}
+              className="group"
             >
-              <Card className={`${stat.bgColor} border-0 shadow-lg group-hover:shadow-2xl transition-all duration-500 overflow-hidden relative`}>
-                <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
-                <CardContent className="p-8 text-center relative z-10">
-                  <div className={`w-16 h-16 mx-auto mb-6 rounded-full bg-gradient-to-r ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                    <stat.icon className="w-8 h-8 text-white" />
+              <Card className={`${stat.bgColor} border-0 shadow-md group-hover:shadow-lg transition-all duration-300 overflow-hidden relative h-32`}>
+                <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+                <CardContent className="p-4 text-center relative z-10 h-full flex flex-col justify-center">
+                  <div className={`w-10 h-10 mx-auto mb-3 rounded-full bg-gradient-to-r ${stat.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                    <stat.icon className="w-5 h-5 text-white" />
                   </div>
                   
-                  <div className={`text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                  <div className={`text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
                     <motion.span
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
@@ -105,7 +105,7 @@ const ModernStatsSection = () => {
                     </motion.span>
                   </div>
                   
-                  <h3 className="text-lg font-semibold text-gray-700 group-hover:text-gray-900 transition-colors">
+                  <h3 className="text-xs font-semibold text-gray-700 group-hover:text-gray-900 transition-colors leading-tight">
                     {stat.label}
                   </h3>
                 </CardContent>
@@ -114,30 +114,30 @@ const ModernStatsSection = () => {
           ))}
         </div>
 
-        {/* Achievement Highlights */}
+        {/* Achievement Highlights - Mais compacto */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
           viewport={{ once: true }}
-          className="mt-16 bg-gradient-to-r from-cv-blue to-cv-red rounded-2xl p-8 text-white text-center"
+          className="mt-10 bg-gradient-to-r from-cv-blue to-cv-red rounded-xl p-6 text-white text-center"
         >
-          <h3 className="text-2xl font-bold mb-4">Principais Conquistas 2024</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <h3 className="text-xl font-bold mb-3">Principais Conquistas 2024</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <Trophy className="w-8 h-8 mx-auto mb-2 text-cv-yellow" />
-              <div className="font-bold">Liga Nacional</div>
-              <div className="text-sm text-gray-200">16 equipas participantes</div>
+              <Trophy className="w-6 h-6 mx-auto mb-2 text-cv-yellow" />
+              <div className="font-bold text-sm">Liga Nacional</div>
+              <div className="text-xs text-gray-200">16 equipas participantes</div>
             </div>
             <div>
-              <Award className="w-8 h-8 mx-auto mb-2 text-cv-yellow" />
-              <div className="font-bold">AfroBasket</div>
-              <div className="text-sm text-gray-200">Qualificação histórica</div>
+              <Award className="w-6 h-6 mx-auto mb-2 text-cv-yellow" />
+              <div className="font-bold text-sm">AfroBasket</div>
+              <div className="text-xs text-gray-200">Qualificação histórica</div>
             </div>
             <div>
-              <Users className="w-8 h-8 mx-auto mb-2 text-cv-yellow" />
-              <div className="font-bold">Desenvolvimento</div>
-              <div className="text-sm text-gray-200">+15% novos federados</div>
+              <Users className="w-6 h-6 mx-auto mb-2 text-cv-yellow" />
+              <div className="font-bold text-sm">Desenvolvimento</div>
+              <div className="text-xs text-gray-200">+15% novos federados</div>
             </div>
           </div>
         </motion.div>
