@@ -42,22 +42,24 @@ const StarIcon = () => (
   </svg>
 );
 
-// Counter Animation Hook
-const useCounter = (end: number, duration: number = 2000) => {
+// Single StatCard component
+const StatCard = ({ stat, index, isInView }: { stat: any; index: number; isInView: boolean }) => {
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (!isVisible) return;
 
-    let startTime: number;
+    const startTime = Date.now();
+    const duration = 1500 + index * 200;
     const startCount = 0;
+    const endCount = stat.numericValue;
 
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
       
-      const currentCount = Math.floor(progress * (end - startCount) + startCount);
+      const currentCount = Math.floor(progress * (endCount - startCount) + startCount);
       setCount(currentCount);
 
       if (progress < 1) {
@@ -66,9 +68,60 @@ const useCounter = (end: number, duration: number = 2000) => {
     };
 
     requestAnimationFrame(animate);
-  }, [end, duration, isVisible]);
+  }, [stat.numericValue, index, isVisible]);
 
-  return { count, setIsVisible };
+  useEffect(() => {
+    if (isInView) {
+      const timer = setTimeout(() => setIsVisible(true), index * 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isInView, index]);
+
+  const displayValue = count > 0 ? (
+    stat.value.includes('+') ? `${count.toLocaleString()}+` : 
+    stat.value.includes(',') ? count.toLocaleString() : 
+    count.toString()
+  ) : stat.value;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8, y: 30 }}
+      animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      whileHover={{ scale: 1.05, y: -10 }}
+      className="group"
+    >
+      <Card className="relative overflow-hidden h-full bg-white/80 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500">
+        <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradientFrom} ${stat.gradientTo} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+        
+        <CardContent className="p-8 relative z-10">
+          <div className="flex items-center justify-between mb-6">
+            <div className={`p-4 rounded-2xl ${stat.bgColor} group-hover:scale-110 transition-transform duration-300`}>
+              <stat.icon className={`w-8 h-8 ${stat.color}`} />
+            </div>
+            <div className="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 group-hover:bg-white group-hover:shadow-md transition-all duration-300">
+              {stat.change}
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <motion.h3 
+              className="text-4xl font-bold text-gray-900 mb-3 font-display"
+              animate={{ scale: isInView ? [1, 1.1, 1] : 1 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+            >
+              {displayValue}
+            </motion.h3>
+            <p className="text-lg font-semibold text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
+              {stat.title}
+            </p>
+          </div>
+
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cv-blue via-cv-yellow to-cv-red opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
 };
 
 const EnhancedStatsSection = () => {
@@ -212,63 +265,14 @@ const EnhancedStatsSection = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {statsData.map((stat, index) => {
-            const { count, setIsVisible } = useCounter(stat.numericValue);
-            
-            useEffect(() => {
-              if (isInView) {
-                const timer = setTimeout(() => setIsVisible(true), index * 200);
-                return () => clearTimeout(timer);
-              }
-            }, [isInView, index, setIsVisible]);
-
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8, y: 30 }}
-                animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -10 }}
-                className="group"
-              >
-                <Card className="relative overflow-hidden h-full bg-white/80 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500">
-                  {/* Gradient Background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradientFrom} ${stat.gradientTo} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-                  
-                  <CardContent className="p-8 relative z-10">
-                    <div className="flex items-center justify-between mb-6">
-                      <div className={`p-4 rounded-2xl ${stat.bgColor} group-hover:scale-110 transition-transform duration-300`}>
-                        <stat.icon className={`w-8 h-8 ${stat.color}`} />
-                      </div>
-                      <div className="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 group-hover:bg-white group-hover:shadow-md transition-all duration-300">
-                        {stat.change}
-                      </div>
-                    </div>
-                    
-                    <div className="text-center">
-                      <motion.h3 
-                        className="text-4xl font-bold text-gray-900 mb-3 font-display"
-                        animate={{ scale: isInView ? [1, 1.1, 1] : 1 }}
-                        transition={{ duration: 0.5, delay: index * 0.2 }}
-                      >
-                        {count > 0 ? (
-                          stat.value.includes('+') ? `${count.toLocaleString()}+` : 
-                          stat.value.includes(',') ? count.toLocaleString() : 
-                          count.toString()
-                        ) : stat.value}
-                      </motion.h3>
-                      <p className="text-lg font-semibold text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
-                        {stat.title}
-                      </p>
-                    </div>
-
-                    {/* Decorative Element */}
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cv-blue via-cv-yellow to-cv-red opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
+          {statsData.map((stat, index) => (
+            <StatCard 
+              key={index} 
+              stat={stat} 
+              index={index} 
+              isInView={isInView}
+            />
+          ))}
         </div>
 
         {/* Progress Section */}
