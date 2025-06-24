@@ -5,7 +5,7 @@ import DynamicBannerCarousel from "@/components/hero/DynamicBannerCarousel";
 import PremiumStatsSection from "@/components/PremiumStatsSection";
 import FibaStyleLiveResults from "@/components/FibaStyleLiveResults";
 import FibaNewsSection from "@/components/FibaNewsSection";
-import PremiumPartnersSection from "@/components/partners/PremiumPartnersSection";
+import FPBStylePartnersSection from "@/components/partners/FPBStylePartnersSection";
 import TeamsSection from "@/components/TeamsSection";
 import FibaStyleHeader from "@/components/header/FibaStyleHeader";
 import Footer from "@/components/Footer";
@@ -73,8 +73,8 @@ const Index = () => {
           <TeamsSection />
         </motion.div>
 
-        {/* Premium Partners Section */}
-        <PremiumPartnersSection />
+        {/* FPB Style Partners Section */}
+        <FPBStylePartnersSection />
       </main>
 
       <Footer />
