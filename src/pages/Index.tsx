@@ -1,12 +1,12 @@
 
 import FCBBLayout from '@/components/layout/FCBBLayout';
-import FibaInspiredHero from '@/components/FibaInspiredHero';
+import DynamicHeroSlider from '@/components/hero/DynamicHeroSlider';
 import FibaVideoGrid from '@/components/FibaVideoGrid';
 import FibaNewsSection from '@/components/FibaNewsSection';
-import EnhancedStatsSection from '@/components/EnhancedStatsSection';
+import ModernStatsSection from '@/components/stats/ModernStatsSection';
 import GameResults from '@/components/GameResults';
 import GameCalendar from '@/components/GameCalendar';
-import FibaPartnersSection from '@/components/FibaPartnersSection';
+import EnhancedPartnersSection from '@/components/partners/EnhancedPartnersSection';
 import GaleriaSection from '@/components/sections/GaleriaSection';
 import ContactoSection from '@/components/sections/ContactoSection';
 import { useSupabaseData } from '@/hooks/useSupabaseData';
@@ -32,7 +32,7 @@ const Index = () => {
     isLoading 
   } = useSupabaseData();
 
-  console.log('Index page - FIBA Design Layout:', {
+  console.log('Index page - Enhanced FIBA Design Layout:', {
     news: newsData?.length || 0,
     clubs: clubsData?.length || 0,
     games: gamesData?.length || 0,
@@ -46,8 +46,8 @@ const Index = () => {
       description="Site oficial da Federação Cabo-verdiana de Basquetebol. Acompanhe as últimas notícias, resultados, classificações e competições do basquetebol cabo-verdiano."
       keywords="FCBB, basquetebol, Cabo Verde, federação, liga nacional, competições, resultados"
     >
-      {/* Hero Section - FIBA Style */}
-      <FibaInspiredHero />
+      {/* Hero Section com Slider Dinâmico */}
+      <DynamicHeroSlider />
 
       {/* Video Grid Section */}
       <FibaVideoGrid />
@@ -55,10 +55,8 @@ const Index = () => {
       {/* News Section */}
       <FibaNewsSection />
 
-      {/* Statistics Section */}
-      <section className="bg-gradient-to-br from-cv-blue to-slate-800">
-        <EnhancedStatsSection />
-      </section>
+      {/* Statistics Section Moderna */}
+      <ModernStatsSection />
 
       {/* Game Results */}
       <section className="bg-gradient-to-br from-slate-50 to-blue-50/40 py-16">
@@ -74,8 +72,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Partners Section */}
-      <FibaPartnersSection />
+      {/* Enhanced Partners Section */}
+      <EnhancedPartnersSection />
 
       {/* Gallery Section */}
       <section className="bg-gradient-to-br from-gray-50 to-slate-100 py-16">
