@@ -9,11 +9,11 @@ import EnhancedPartnersSection from "@/components/partners/EnhancedPartnersSecti
 import TeamsSection from "@/components/TeamsSection";
 import FibaStyleHeader from "@/components/header/FibaStyleHeader";
 import Footer from "@/components/Footer";
-import { useInternationalization } from "@/contexts/InternationalizationContext";
+import { useTranslation } from "@/contexts/InternationalizationContext";
 import SEO from "@/components/SEO";
 
 const Index = () => {
-  const { t } = useInternationalization();
+  const { t } = useTranslation();
 
   useEffect(() => {
     console.log("Index page loaded - FCBB website initialized");
