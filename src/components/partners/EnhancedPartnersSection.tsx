@@ -10,6 +10,7 @@ const EnhancedPartnersSection = () => {
       title: "Parceiros Platina",
       icon: Trophy,
       color: "bg-gradient-to-r from-gray-300 to-gray-500",
+      level: "platinum",
       partners: [
         {
           name: "FIBA",
@@ -29,6 +30,7 @@ const EnhancedPartnersSection = () => {
       title: "Parceiros Ouro",
       icon: Award,
       color: "bg-gradient-to-r from-yellow-400 to-yellow-600",
+      level: "gold",
       partners: [
         {
           name: "TCL",
@@ -54,6 +56,7 @@ const EnhancedPartnersSection = () => {
       title: "Parceiros Prata",
       icon: Star,
       color: "bg-gradient-to-r from-gray-400 to-gray-600",
+      level: "silver",
       partners: [
         {
           name: "Molten",
@@ -79,6 +82,7 @@ const EnhancedPartnersSection = () => {
       title: "Parceiros Bronze",
       icon: Handshake,
       color: "bg-gradient-to-r from-orange-400 to-orange-600",
+      level: "bronze",
       partners: [
         {
           name: "CV Multimédia",
