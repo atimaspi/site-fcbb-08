@@ -3,8 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { HelmetProvider } from 'react-helmet-async';
-import { AuthProvider } from '@/contexts/AuthContext';
+import { AuthProvider } from "@/contexts/AuthContext";
 import { InternationalizationProvider } from '@/contexts/InternationalizationContext';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
@@ -62,6 +61,11 @@ import MissaoVisaoSobrePage from "./pages/sobre/MissaoVisaoPage";
 
 // Components
 import InteractiveFloatingButtons from "./components/InteractiveFloatingButtons";
+
+import { HelmetProvider } from 'react-helmet-async';
+
+import SelecaoMasculinaDetalhesPage from "./pages/teams/SelecaoMasculinaDetalhesPage";
+import LigaNacionalDetalhesPage from "./pages/competitions/LigaNacionalDetalhesPage";
 
 const queryClient = new QueryClient();
 
@@ -121,6 +125,8 @@ const App = () => (
                   <Route path="/selecoes/masculina" element={<SelecaoMasculinaPage />} />
                   <Route path="/selecoes/feminina" element={<SelecaoFemininaPage />} />
                   <Route path="/selecoes/jovens" element={<SelecoesJovensPage />} />
+                  <Route path="/selecoes/senior-masculina" element={<SelecaoMasculinaDetalhesPage />} />
+                  <Route path="/competicoes/liga-nacional" element={<LigaNacionalDetalhesPage />} />
                   
                   {/* About FCBB routes */}
                   <Route path="/sobre/historia" element={<HistoriaSobrePage />} />
