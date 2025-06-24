@@ -1,11 +1,11 @@
 
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import FibaInspiredHero from "@/components/FibaInspiredHero";
+import DynamicBannerCarousel from "@/components/hero/DynamicBannerCarousel";
 import ModernStatsSection from "@/components/stats/ModernStatsSection";
 import FibaStyleLiveResults from "@/components/FibaStyleLiveResults";
 import FibaNewsSection from "@/components/FibaNewsSection";
-import EnhancedPartnersSection from "@/components/partners/EnhancedPartnersSection";
+import PremiumPartnersSection from "@/components/partners/PremiumPartnersSection";
 import TeamsSection from "@/components/TeamsSection";
 import FibaStyleHeader from "@/components/header/FibaStyleHeader";
 import Footer from "@/components/Footer";
@@ -30,14 +30,10 @@ const Index = () => {
       <FibaStyleHeader />
       
       <main>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <FibaInspiredHero />
-        </motion.div>
+        {/* Dynamic Banner Carousel */}
+        <DynamicBannerCarousel />
 
+        {/* Live Results Section */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -47,6 +43,7 @@ const Index = () => {
           <FibaStyleLiveResults />
         </motion.div>
 
+        {/* Stats Section */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -56,6 +53,7 @@ const Index = () => {
           <ModernStatsSection />
         </motion.div>
 
+        {/* News Section */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -65,6 +63,7 @@ const Index = () => {
           <FibaNewsSection />
         </motion.div>
 
+        {/* Teams Section */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -74,14 +73,8 @@ const Index = () => {
           <TeamsSection />
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <EnhancedPartnersSection />
-        </motion.div>
+        {/* Premium Partners Section */}
+        <PremiumPartnersSection />
       </main>
 
       <Footer />
