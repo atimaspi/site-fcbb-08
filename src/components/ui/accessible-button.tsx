@@ -32,7 +32,7 @@ const AccessibleButton = React.forwardRef<HTMLButtonElement, AccessibleButtonPro
       <Button
         ref={ref}
         className={cn(
-          "focus-visible-cv transition-all duration-200 active:scale-95",
+          "focus:outline-none focus:ring-2 focus:ring-cv-blue focus:ring-offset-2 transition-all duration-200 active:scale-95",
           "hover:shadow-md disabled:shadow-none",
           className
         )}

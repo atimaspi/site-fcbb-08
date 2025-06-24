@@ -3,13 +3,39 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MapPin, Phone, Mail, Globe, Users, Search, Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MapPin, Phone, Mail, Globe, Users, Search, Loader2, Filter } from 'lucide-react';
+import { useState, useMemo } from 'react';
 import { useBackendData } from '@/hooks/useBackendData';
+import { Link } from 'react-router-dom';
 
 const ClubsDirectory = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedIsland, setSelectedIsland] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const { clubs, clubsLoading, clubsError } = useBackendData();
+
+  // Memoized filtered clubs to prevent unnecessary re-renders
+  const filteredClubs = useMemo(() => {
+    if (!clubs) return [];
+    
+    return clubs.filter(club => {
+      const matchesSearch = club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (club.address && club.address.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (club.island && club.island.toLowerCase().includes(searchTerm.toLowerCase()));
+      
+      const matchesIsland = selectedIsland === 'all' || club.island === selectedIsland;
+      const matchesStatus = selectedStatus === 'all' || club.status === selectedStatus;
+      
+      return matchesSearch && matchesIsland && matchesStatus;
+    });
+  }, [clubs, searchTerm, selectedIsland, selectedStatus]);
+
+  // Memoized islands list
+  const islands = useMemo(() => {
+    if (!clubs) return [];
+    return [...new Set(clubs.map(club => club.island).filter(Boolean))];
+  }, [clubs]);
 
   if (clubsLoading) {
     return (
@@ -38,19 +64,11 @@ const ClubsDirectory = () => {
     );
   }
 
-  const filteredClubs = clubs?.filter(club =>
-    club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (club.address && club.address.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (club.island && club.island.toLowerCase().includes(searchTerm.toLowerCase()))
-  ) || [];
-
-  const islands = [...new Set(clubs?.map(club => club.island).filter(Boolean) || [])];
-
   return (
     <div className="space-y-6">
       <Card>
         <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -62,6 +80,34 @@ const ClubsDirectory = () => {
                   className="pl-10"
                 />
               </div>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Select value={selectedIsland} onValueChange={setSelectedIsland}>
+                <SelectTrigger className="w-full sm:w-48">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Filtrar por ilha" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas as ilhas</SelectItem>
+                  {islands.map((island) => (
+                    <SelectItem key={island} value={island}>
+                      {island}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                <SelectTrigger className="w-full sm:w-48">
+                  <SelectValue placeholder="Filtrar por status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os status</SelectItem>
+                  <SelectItem value="active">Ativos</SelectItem>
+                  <SelectItem value="inactive">Inativos</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </CardContent>
@@ -107,13 +153,20 @@ const ClubsDirectory = () => {
                 {club.contact_phone && (
                   <div className="flex items-center text-sm text-gray-600">
                     <Phone className="w-4 h-4 mr-2 flex-shrink-0" />
-                    <span>{club.contact_phone}</span>
+                    <a href={`tel:${club.contact_phone}`} className="hover:text-cv-blue">
+                      {club.contact_phone}
+                    </a>
                   </div>
                 )}
                 {club.contact_email && (
                   <div className="flex items-center text-sm text-gray-600">
                     <Mail className="w-4 h-4 mr-2 flex-shrink-0" />
-                    <span className="break-all">{club.contact_email}</span>
+                    <a 
+                      href={`mailto:${club.contact_email}`} 
+                      className="break-all hover:text-cv-blue"
+                    >
+                      {club.contact_email}
+                    </a>
                   </div>
                 )}
                 {club.website && (
@@ -131,8 +184,14 @@ const ClubsDirectory = () => {
                 )}
               </div>
 
-              <Button variant="outline" className="w-full mt-4">
-                Ver Detalhes
+              <Button 
+                variant="outline" 
+                className="w-full mt-4"
+                asChild
+              >
+                <Link to={`/clubes/${club.id}`}>
+                  Ver Detalhes
+                </Link>
               </Button>
             </CardContent>
           </Card>
@@ -147,7 +206,9 @@ const ClubsDirectory = () => {
               Nenhum clube encontrado
             </h3>
             <p className="text-gray-500">
-              {searchTerm ? 'Tente ajustar os termos de pesquisa.' : 'Não há clubes registados na base de dados.'}
+              {searchTerm || selectedIsland !== 'all' || selectedStatus !== 'all' 
+                ? 'Tente ajustar os filtros de pesquisa.' 
+                : 'Não há clubes registados na base de dados.'}
             </p>
           </CardContent>
         </Card>
@@ -163,10 +224,14 @@ const ClubsDirectory = () => {
               {islands.map((island) => {
                 const clubCount = clubs?.filter(club => club.island === island).length || 0;
                 return (
-                  <div key={island} className="text-center p-4 bg-gray-50 rounded-lg">
+                  <button 
+                    key={island} 
+                    className="text-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    onClick={() => setSelectedIsland(island)}
+                  >
                     <div className="text-2xl font-bold text-cv-blue">{clubCount}</div>
                     <div className="text-sm text-gray-600">{island}</div>
-                  </div>
+                  </button>
                 );
               })}
             </div>

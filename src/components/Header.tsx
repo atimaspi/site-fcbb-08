@@ -1,8 +1,8 @@
 
-import CompactHeader from './CompactHeader';
+import EnhancedFibaStyleHeader from './header/EnhancedFibaStyleHeader';
 
 const Header = () => {
-  return <CompactHeader />;
+  return <EnhancedFibaStyleHeader />;
 };
 
 export default Header;

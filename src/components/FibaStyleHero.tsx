@@ -3,8 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Play, Trophy, Users, Calendar, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useBackendData } from '@/hooks/useBackendData';
 
 const FibaStyleHero = () => {
+  const { teams, clubs, competitions, games } = useBackendData();
+
+  // Calculate dynamic stats
+  const totalTeams = teams?.length || 16;
+  const totalClubs = clubs?.length || 0;
+  const totalCompetitions = competitions?.length || 5;
+  const totalPlayers = 240; // Can be calculated from players data when available
+
   return (
     <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -51,30 +60,30 @@ const FibaStyleHero = () => {
               className="border-2 border-white text-white hover:bg-white hover:text-cv-blue px-8 py-4 text-lg font-semibold backdrop-blur-sm"
               asChild
             >
-              <Link to="/classificacoes">
+              <Link to="/resultados/classificacoes">
                 <Trophy className="mr-2 h-5 w-5" />
                 Classificações
               </Link>
             </Button>
           </div>
 
-          {/* Quick Stats */}
+          {/* Dynamic Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-cv-yellow mb-2">16</div>
+              <div className="text-3xl md:text-4xl font-bold text-cv-yellow mb-2">{totalTeams}</div>
               <div className="text-sm md:text-base text-gray-200">Equipas</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-cv-yellow mb-2">5</div>
+              <div className="text-3xl md:text-4xl font-bold text-cv-yellow mb-2">{totalCompetitions}</div>
               <div className="text-sm md:text-base text-gray-200">Competições</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-cv-yellow mb-2">240+</div>
+              <div className="text-3xl md:text-4xl font-bold text-cv-yellow mb-2">{totalPlayers}+</div>
               <div className="text-sm md:text-base text-gray-200">Jogadores</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-cv-yellow mb-2">9</div>
-              <div className="text-sm md:text-base text-gray-200">Ilhas</div>
+              <div className="text-3xl md:text-4xl font-bold text-cv-yellow mb-2">{totalClubs}</div>
+              <div className="text-sm md:text-base text-gray-200">Clubes</div>
             </div>
           </div>
         </div>
