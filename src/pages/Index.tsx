@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import DynamicBannerCarousel from "@/components/hero/DynamicBannerCarousel";
-import ModernStatsSection from "@/components/stats/ModernStatsSection";
+import PremiumStatsSection from "@/components/PremiumStatsSection";
 import FibaStyleLiveResults from "@/components/FibaStyleLiveResults";
 import FibaNewsSection from "@/components/FibaNewsSection";
 import PremiumPartnersSection from "@/components/partners/PremiumPartnersSection";
@@ -43,14 +43,14 @@ const Index = () => {
           <FibaStyleLiveResults />
         </motion.div>
 
-        {/* Stats Section */}
+        {/* Premium Stats Section */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <ModernStatsSection />
+          <PremiumStatsSection />
         </motion.div>
 
         {/* News Section */}
