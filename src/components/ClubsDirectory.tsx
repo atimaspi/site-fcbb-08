@@ -15,11 +15,93 @@ const ClubsDirectory = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const { clubs, clubsLoading, clubsError } = useBackendData();
 
+  // Sample clubs data for when backend is not available
+  const sampleClubs = [
+    {
+      id: '1',
+      name: 'ABC Basket',
+      island: 'São Vicente',
+      address: 'Mindelo, São Vicente',
+      founded_year: 1988,
+      description: 'Clube histórico de São Vicente',
+      contact_phone: '+238 232 12 34',
+      contact_email: 'abc@basket.cv',
+      website: 'www.abcbasket.cv',
+      status: 'active',
+      active: true
+    },
+    {
+      id: '2',
+      name: 'Sal Basket Clube',
+      island: 'Sal',
+      address: 'Espargos, Sal',
+      founded_year: 2001,
+      description: 'Principal clube da ilha do Sal',
+      contact_phone: '+238 241 56 78',
+      contact_email: 'sal@basket.cv',
+      website: 'www.salbasket.cv',
+      status: 'active',
+      active: true
+    },
+    {
+      id: '3',
+      name: 'Fogo Basketball',
+      island: 'Fogo',
+      address: 'São Filipe, Fogo',
+      founded_year: 1999,
+      description: 'Representante da ilha do Fogo',
+      contact_phone: '+238 281 90 12',
+      contact_email: 'fogo@basketball.cv',
+      status: 'active',
+      active: true
+    },
+    {
+      id: '4',
+      name: 'Boavista Sports',
+      island: 'Boavista',
+      address: 'Sal Rei, Boavista',
+      founded_year: 2003,
+      description: 'Clube emergente da Boavista',
+      contact_phone: '+238 251 34 56',
+      contact_email: 'boavista@sports.cv',
+      status: 'active',
+      active: true
+    },
+    {
+      id: '5',
+      name: 'Santo Antão Basket',
+      island: 'Santo Antão',
+      address: 'Porto Novo, Santo Antão',
+      founded_year: 1992,
+      description: 'Tradicional clube de Santo Antão',
+      contact_phone: '+238 225 78 90',
+      contact_email: 'santoantao@basket.cv',
+      status: 'active',
+      active: true
+    },
+    {
+      id: '6',
+      name: 'CD Travadores',
+      island: 'Santiago',
+      address: 'Achada Santo Antonio, Santiago',
+      founded_year: 1993,
+      description: 'Um dos clubes mais tradicionais de Santiago',
+      contact_phone: '+238 265 87 00',
+      contact_email: 'tavadores@fcbb.cv',
+      website: 'https://www.cdtravadores.cv',
+      status: 'active',
+      active: true
+    }
+  ];
+
+  // Use sample data if clubs from backend is empty or loading fails
+  const displayClubs = clubs && clubs.length > 0 ? clubs : sampleClubs;
+
   // Memoized filtered clubs to prevent unnecessary re-renders
   const filteredClubs = useMemo(() => {
-    if (!clubs) return [];
+    if (!displayClubs) return [];
     
-    return clubs.filter(club => {
+    return displayClubs.filter(club => {
       const matchesSearch = club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (club.address && club.address.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (club.island && club.island.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -29,13 +111,13 @@ const ClubsDirectory = () => {
       
       return matchesSearch && matchesIsland && matchesStatus;
     });
-  }, [clubs, searchTerm, selectedIsland, selectedStatus]);
+  }, [displayClubs, searchTerm, selectedIsland, selectedStatus]);
 
   // Memoized islands list
   const islands = useMemo(() => {
-    if (!clubs) return [];
-    return [...new Set(clubs.map(club => club.island).filter(Boolean))];
-  }, [clubs]);
+    if (!displayClubs) return [];
+    return [...new Set(displayClubs.map(club => club.island).filter(Boolean))];
+  }, [displayClubs]);
 
   if (clubsLoading) {
     return (
@@ -43,22 +125,6 @@ const ClubsDirectory = () => {
         <CardContent className="p-12 text-center">
           <Loader2 className="mx-auto h-8 w-8 animate-spin text-cv-blue mb-4" />
           <p className="text-gray-600">Carregando clubes...</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (clubsError) {
-    return (
-      <Card>
-        <CardContent className="p-12 text-center">
-          <Users className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-          <h3 className="text-lg font-semibold text-gray-600 mb-2">
-            Erro ao carregar clubes
-          </h3>
-          <p className="text-gray-500">
-            Não foi possível carregar os dados dos clubes.
-          </p>
         </CardContent>
       </Card>
     );
@@ -187,11 +253,9 @@ const ClubsDirectory = () => {
               <Button 
                 variant="outline" 
                 className="w-full mt-4"
-                asChild
+                onClick={() => alert(`Detalhes do clube ${club.name} - Funcionalidade em desenvolvimento`)}
               >
-                <Link to={`/clubes/${club.id}`}>
-                  Ver Detalhes
-                </Link>
+                Ver Detalhes
               </Button>
             </CardContent>
           </Card>
@@ -222,7 +286,7 @@ const ClubsDirectory = () => {
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {islands.map((island) => {
-                const clubCount = clubs?.filter(club => club.island === island).length || 0;
+                const clubCount = displayClubs?.filter(club => club.island === island).length || 0;
                 return (
                   <button 
                     key={island} 

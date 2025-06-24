@@ -1,90 +1,91 @@
 
-import FCBBLayout from '@/components/layout/FCBBLayout';
-import DynamicHeroSlider from '@/components/hero/DynamicHeroSlider';
-import FibaVideoGrid from '@/components/FibaVideoGrid';
-import FibaNewsSection from '@/components/FibaNewsSection';
-import ModernStatsSection from '@/components/stats/ModernStatsSection';
-import GameResults from '@/components/GameResults';
-import GameCalendar from '@/components/GameCalendar';
-import EnhancedPartnersSection from '@/components/partners/EnhancedPartnersSection';
-import GaleriaSection from '@/components/sections/GaleriaSection';
-import ContactoSection from '@/components/sections/ContactoSection';
-import { useSupabaseData } from '@/hooks/useSupabaseData';
+import { useEffect } from "react";
+import { motion } from "framer-motion";
+import FibaInspiredHero from "@/components/FibaInspiredHero";
+import ModernStatsSection from "@/components/stats/ModernStatsSection";
+import FibaStyleLiveResults from "@/components/FibaStyleLiveResults";
+import FibaNewsSection from "@/components/FibaNewsSection";
+import EnhancedPartnersSection from "@/components/partners/EnhancedPartnersSection";
+import TeamsSection from "@/components/TeamsSection";
+import FibaStyleHeader from "@/components/header/FibaStyleHeader";
+import Footer from "@/components/Footer";
+import { useInternationalization } from "@/contexts/InternationalizationContext";
+import SEO from "@/components/SEO";
 
 const Index = () => {
-  const { 
-    newsData, 
-    clubsData, 
-    gamesData, 
-    competitionsData,
-    teamsData,
-    statsData,
-    playersData,
-    refereesData,
-    eventsData,
-    federationsData,
-    regionalAssociationsData,
-    partnersData,
-    heroSlidesData,
-    galleryData,
-    galleryImagesData,
-    siteSettingsData,
-    isLoading 
-  } = useSupabaseData();
+  const { t } = useInternationalization();
 
-  console.log('Index page - Enhanced FIBA Design Layout:', {
-    news: newsData?.length || 0,
-    clubs: clubsData?.length || 0,
-    games: gamesData?.length || 0,
-    competitions: competitionsData?.length || 0,
-    loading: isLoading
-  });
+  useEffect(() => {
+    console.log("Index page loaded - FCBB website initialized");
+  }, []);
 
   return (
-    <FCBBLayout 
-      title="FCBB - Federação Cabo-verdiana de Basquetebol" 
-      description="Site oficial da Federação Cabo-verdiana de Basquetebol. Acompanhe as últimas notícias, resultados, classificações e competições do basquetebol cabo-verdiano."
-      keywords="FCBB, basquetebol, Cabo Verde, federação, liga nacional, competições, resultados"
-    >
-      {/* Hero Section com Slider Dinâmico */}
-      <DynamicHeroSlider />
+    <div className="min-h-screen bg-white">
+      <SEO 
+        title="FCBB - Federação Cabo-verdiana de Basquetebol"
+        description="Website oficial da Federação Cabo-verdiana de Basquetebol. Acompanhe as últimas notícias, resultados, classificações e informações sobre o basquetebol em Cabo Verde."
+        keywords="basquetebol, Cabo Verde, FCBB, federação, desporto, competições, seleções nacionais"
+      />
+      
+      <FibaStyleHeader />
+      
+      <main>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <FibaInspiredHero />
+        </motion.div>
 
-      {/* Video Grid Section */}
-      <FibaVideoGrid />
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <FibaStyleLiveResults />
+        </motion.div>
 
-      {/* News Section */}
-      <FibaNewsSection />
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <ModernStatsSection />
+        </motion.div>
 
-      {/* Statistics Section Moderna */}
-      <ModernStatsSection />
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <FibaNewsSection />
+        </motion.div>
 
-      {/* Game Results */}
-      <section className="bg-gradient-to-br from-slate-50 to-blue-50/40 py-16">
-        <div className="cv-container">
-          <GameResults />
-        </div>
-      </section>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <TeamsSection />
+        </motion.div>
 
-      {/* Game Calendar */}
-      <section className="bg-white py-16">
-        <div className="cv-container">
-          <GameCalendar />
-        </div>
-      </section>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <EnhancedPartnersSection />
+        </motion.div>
+      </main>
 
-      {/* Enhanced Partners Section */}
-      <EnhancedPartnersSection />
-
-      {/* Gallery Section */}
-      <section className="bg-gradient-to-br from-gray-50 to-slate-100 py-16">
-        <GaleriaSection />
-      </section>
-
-      {/* Contact Section */}
-      <section className="bg-gradient-to-r from-cv-blue to-cv-red py-16 text-white">
-        <ContactoSection />
-      </section>
-    </FCBBLayout>
+      <Footer />
+    </div>
   );
 };
 
